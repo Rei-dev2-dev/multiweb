@@ -23,7 +23,10 @@ export const MapCoordinatePicker: React.FC<MapCoordinatePickerProps> = ({
 
     let isMounted = true;
 
-    import("leaflet").then((L) => {
+    Promise.all([
+      import("leaflet"),
+      import("leaflet/dist/leaflet.css" as never),
+    ]).then(([L]) => {
       if (!isMounted || !mapContainerRef.current) return;
 
       const initialLat = isNaN(latitude) ? -3.3308 : latitude;

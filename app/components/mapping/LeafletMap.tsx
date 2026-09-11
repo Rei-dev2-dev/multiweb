@@ -25,8 +25,11 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
 
     let isMounted = true;
 
-    // Dynamically import leaflet to avoid SSR issues
-    import("leaflet").then((L) => {
+    // Dynamically import leaflet (CSS + JS) to avoid SSR issues
+    Promise.all([
+      import("leaflet"),
+      import("leaflet/dist/leaflet.css" as never),
+    ]).then(([L]) => {
       if (!isMounted || !mapContainerRef.current) return;
 
       // Initialize map if not yet created
