@@ -1,69 +1,135 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState } from "react";
+import { DataProvider } from "./context/DataContext";
+import { Sidebar, ActiveTab } from "./components/Sidebar";
+import { Header } from "./components/Header";
+import { DashboardOverview } from "./components/DashboardOverview";
+import { UploadLaporan } from "./components/laporan/UploadLaporan";
+import { RiwayatLaporan } from "./components/laporan/RiwayatLaporan";
+import { KategoriLaporan } from "./components/laporan/KategoriLaporan";
+import { MappingDashboard } from "./components/mapping/MappingDashboard";
+import { KategoriIP } from "./components/mapping/KategoriIP";
+import { StockTampilan } from "./components/stock/StockTampilan";
+import { TambahStock } from "./components/stock/TambahStock";
+import { KategoriStock } from "./components/stock/KategoriStock";
+import { LaporanStock } from "./components/stock/LaporanStock";
+import { RiwayatPeminjaman } from "./components/stock/RiwayatPeminjaman";
+
+function DashboardApp() {
+  const [activeTab, setActiveTab] = useState<ActiveTab>("dashboard");
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
+  // Get current page titles
+  const getPageInfo = () => {
+    switch (activeTab) {
+      case "dashboard":
+        return {
+          title: "Dashboard Overview",
+          subtitle: "Ringkasan metrik laporan pekerjaan, IP monitoring, dan inventaris barang"
+        };
+      case "laporan_upload":
+        return {
+          title: "Upload Laporan Pekerjaan",
+          subtitle: "Form input dokumentasi teknis lapangan dan unggah multi-foto"
+        };
+      case "laporan_riwayat":
+        return {
+          title: "Riwayat Laporan Pekerjaan",
+          subtitle: "Daftar riwayat dan galeri foto laporan kegiatan operasional staff"
+        };
+      case "laporan_kategori":
+        return {
+          title: "Kategori Laporan",
+          subtitle: "Master data pengelompokan jenis laporan teknis"
+        };
+      case "mapping_dashboard":
+        return {
+          title: "Dashboard Mapping Monitoring",
+          subtitle: "Pemetaan interaktif status router, tower & BTS Kalsel secara real-time"
+        };
+      case "mapping_kategori":
+        return {
+          title: "Kategori & Data IP",
+          subtitle: "Manajemen daftar titik IP address dan kategori grup perangkat"
+        };
+      case "stock_tampilan":
+        return {
+          title: "Tampilan Stock Barang",
+          subtitle: "Katalog stok ketersediaan barang dan peringatan restock gudang"
+        };
+      case "stock_tambah":
+        return {
+          title: "Tambah Stock Barang",
+          subtitle: "Form registrasi item barang baru ke dalam database inventaris"
+        };
+      case "stock_kategori":
+        return {
+          title: "Kategori Stock",
+          subtitle: "Master data pengelompokan jenis barang dan logistik"
+        };
+      case "stock_laporan":
+        return {
+          title: "Laporan Stock Barang",
+          subtitle: "Rekapitulasi riwayat transaksi mutasi barang masuk dan keluar"
+        };
+      case "stock_peminjaman":
+        return {
+          title: "Riwayat Peminjaman Barang",
+          subtitle: "Pencatatan peminjaman alat kerja oleh staff lapangan dan pengembalian"
+        };
+      default:
+        return {
+          title: "Portal Staff Internal",
+          subtitle: "Sistem Manajemen Operasional & Monitoring Kalsel"
+        };
+    }
+  };
+
+  const pageInfo = getPageInfo();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="min-h-screen bg-slate-100 flex">
+      {/* Sidebar Navigation */}
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        isOpen={isSidebarOpen}
+        setIsOpen={setIsSidebarOpen}
+      />
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 lg:pl-72">
+        {/* Sticky Header */}
+        <Header
+          onMenuClick={() => setIsSidebarOpen(true)}
+          title={pageInfo.title}
+          subtitle={pageInfo.subtitle}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        {/* Dynamic Page Content */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          {activeTab === "dashboard" && <DashboardOverview setActiveTab={setActiveTab} />}
+          {activeTab === "laporan_upload" && <UploadLaporan setActiveTab={setActiveTab} />}
+          {activeTab === "laporan_riwayat" && <RiwayatLaporan setActiveTab={setActiveTab} />}
+          {activeTab === "laporan_kategori" && <KategoriLaporan />}
+          {activeTab === "mapping_dashboard" && <MappingDashboard setActiveTab={setActiveTab} />}
+          {activeTab === "mapping_kategori" && <KategoriIP />}
+          {activeTab === "stock_tampilan" && <StockTampilan setActiveTab={setActiveTab} />}
+          {activeTab === "stock_tambah" && <TambahStock setActiveTab={setActiveTab} />}
+          {activeTab === "stock_kategori" && <KategoriStock />}
+          {activeTab === "stock_laporan" && <LaporanStock />}
+          {activeTab === "stock_peminjaman" && <RiwayatPeminjaman />}
+        </main>
+      </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <DataProvider>
+      <DashboardApp />
+    </DataProvider>
   );
 }
