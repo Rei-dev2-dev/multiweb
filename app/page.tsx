@@ -1,69 +1,91 @@
-import Image from "next/image";
+import ShapeGrid from "@/components/ShapeGrid";
+import SplitText from "@/components/SplitText";
+import ConstellationBackground from "@/components/ConstellationBackground";
+import LoginForm from "@/components/LoginForm";
 
-export default function Home() {
+export default function LoginPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen w-full flex flex-col lg:flex-row bg-white overflow-hidden selection:bg-blue-100 selection:text-blue-700">
+      {/* LEFT COLUMN: Login Form with ShapeGrid Background */}
+      <section className="w-full lg:w-[48%] xl:w-[42%] min-h-screen flex flex-col justify-center items-center relative p-6 sm:p-10 border-r border-slate-100 overflow-hidden bg-white">
+        {/* React Bits ShapeGrid Canvas in background (restored to original) */}
+        <div className="absolute inset-0 z-0 pointer-events-auto opacity-70">
+          <ShapeGrid
+            direction="diagonal"
+            speed={0.3}
+            squareSize={48}
+            borderColor="rgba(203, 213, 225, 0.45)"
+            hoverFillColor="rgba(37, 99, 235, 0.08)"
+            shape="square"
+            hoverTrailAmount={5}
+            className="w-full h-full"
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+
+        {/* Subtle radial mask to make the form area clear and readable while showing grid around */}
+        <div className="absolute inset-0 z-1 pointer-events-none bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.92)_0%,_rgba(255,255,255,0.72)_60%,_rgba(255,255,255,0.25)_100%)]" />
+
+        {/* Interactive Login Form */}
+        <div className="relative z-10 w-full flex justify-center">
+          <LoginForm />
+        </div>
+      </section>
+
+      {/* RIGHT COLUMN: Interactive Constellation Mesh with React Bits SplitText */}
+      <section className="hidden lg:flex flex-1 min-h-screen relative flex-col items-center justify-center bg-slate-50/40 overflow-hidden">
+        {/* Interactive Constellation Mesh Canvas matching reference image */}
+        <div className="absolute inset-0 z-0 pointer-events-auto">
+          <ConstellationBackground
+            nodeCount={75}
+            maxDistance={140}
+            lineColor="rgba(148, 163, 184, 0.35)"
+            nodeColor="rgba(100, 116, 139, 0.7)"
+          />
+        </div>
+
+        {/* Ambient Gradient Glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] bg-blue-100/30 rounded-full blur-3xl pointer-events-none -z-10" />
+
+        {/* Big Bold Headline with React Bits SplitText and Outfit Font */}
+        <div className="relative z-10 px-8 text-center select-none max-w-2xl font-[family-name:var(--font-outfit)]">
+          <h1 className="text-3xl xl:text-[45px] font-extrabold tracking-[-0.03em] text-slate-900 leading-[1.22] flex flex-col items-center gap-1 drop-shadow-xs">
+            <SplitText
+              text="WELCOM TO"
+              className="text-slate-900 font-extrabold tracking-[-0.03em]"
+              delay={40}
+              duration={0.8}
+              ease="power3.out"
+              useScrollTrigger={false}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <SplitText
+              text="MULTIPLE FUNCTION WEB"
+              className="text-slate-900 font-extrabold tracking-[-0.03em]"
+              delay={35}
+              duration={0.8}
+              ease="power3.out"
+              useScrollTrigger={false}
+            />
+            <div className="flex items-center justify-center gap-3 mt-0.5">
+              <SplitText
+                text="BY"
+                className="text-slate-900 font-extrabold tracking-[-0.03em]"
+                delay={40}
+                duration={0.8}
+                ease="power3.out"
+                useScrollTrigger={false}
+              />
+              <SplitText
+                text="Multinet"
+                className="text-blue-600 font-extrabold tracking-[-0.03em]"
+                delay={45}
+                duration={0.9}
+                ease="power3.out"
+                useScrollTrigger={false}
+              />
+            </div>
+          </h1>
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
