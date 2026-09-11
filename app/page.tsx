@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { DataProvider } from "./context/DataContext";
 import { Sidebar, ActiveTab } from "./components/Sidebar";
 import { Header } from "./components/Header";
@@ -17,8 +18,35 @@ import { LaporanStock } from "./components/stock/LaporanStock";
 import { RiwayatPeminjaman } from "./components/stock/RiwayatPeminjaman";
 
 function DashboardApp() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<ActiveTab>("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isAuthChecked, setIsAuthChecked] = useState<boolean>(false);
+
+  // Auth guard — redirect ke /login jika belum login
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isAuth = localStorage.getItem("mw_auth") === "true";
+      if (!isAuth) {
+        router.replace("/login");
+      } else {
+        setIsAuthChecked(true);
+      }
+    }
+  }, [router]);
+
+  // Tampilkan loading sampai auth selesai dicek
+  if (!isAuthChecked) {
+    return (
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm text-slate-500 font-medium">Memuat dashboard...</span>
+        </div>
+      </div>
+    );
+  }
+
 
   // Get current page titles
   const getPageInfo = () => {

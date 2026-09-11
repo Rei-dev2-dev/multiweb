@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { User, Lock, Eye, EyeOff, Check, Loader2 } from "lucide-react";
 
 export default function LoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -12,20 +14,37 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
+  // Kalau sudah login, langsung ke dashboard
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("mw_auth") === "true") {
+      router.replace("/");
+    }
+  }, [router]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      setStatusMessage("Silakan lengkapi email dan kata sandi Anda.");
+      setStatusMessage("Silakan lengkapi username dan kata sandi Anda.");
       return;
     }
 
     setIsLoading(true);
     setStatusMessage(null);
 
-    // Simulate login demonstration
+    // Simulasi autentikasi (ganti dengan API call jika ada backend)
     setTimeout(() => {
+      // Simpan session ke localStorage
+      localStorage.setItem("mw_auth", "true");
+      localStorage.setItem("mw_user", email);
+      if (rememberMe) {
+        localStorage.setItem("mw_remember", "true");
+      }
       setIsLoading(false);
       setStatusMessage("Login berhasil! Mengarahkan ke dashboard...");
+      // Redirect ke dashboard setelah animasi selesai
+      setTimeout(() => {
+        router.push("/");
+      }, 700);
     }, 1200);
   };
 
