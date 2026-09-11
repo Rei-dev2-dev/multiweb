@@ -21,6 +21,10 @@ export default function LoginForm() {
     }
   }, [router]);
 
+  // Kredensial hardcoded (sementara tanpa database)
+  const VALID_USERNAME = "joko";
+  const VALID_PASSWORD = "hidup-jokowi";
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
@@ -31,9 +35,15 @@ export default function LoginForm() {
     setIsLoading(true);
     setStatusMessage(null);
 
-    // Simulasi autentikasi (ganti dengan API call jika ada backend)
+    // Simulasi delay jaringan lalu validasi kredensial
     setTimeout(() => {
-      // Simpan session ke localStorage
+      if (email !== VALID_USERNAME || password !== VALID_PASSWORD) {
+        setIsLoading(false);
+        setStatusMessage("Username atau password salah. Silakan coba lagi.");
+        return;
+      }
+
+      // Kredensial benar — simpan session ke localStorage
       localStorage.setItem("mw_auth", "true");
       localStorage.setItem("mw_user", email);
       if (rememberMe) {
@@ -45,7 +55,7 @@ export default function LoginForm() {
       setTimeout(() => {
         router.push("/");
       }, 700);
-    }, 1200);
+    }, 1000);
   };
 
   return (
